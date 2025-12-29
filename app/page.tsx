@@ -26,8 +26,8 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Use local Next.js API routes (empty string relative path)
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  // Use the Render backend URL directly
+  const API_URL = "https://margin-baclkend-1.onrender.com";
 
   // Fetch config on load
   useEffect(() => {

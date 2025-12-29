@@ -122,21 +122,27 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-gray-950 text-gray-100">
-      <div className="w-full max-w-md bg-gray-900 rounded-xl shadow-2xl p-8 border border-gray-800">
-        <h1 className="text-2xl font-bold mb-6 text-center text-blue-400">Margin Calculator</h1>
+    <main className="flex min-h-screen items-center justify-center bg-[#0b0e11] p-4 text-[#eaecef] font-sans">
+      <div className="w-full max-w-lg rounded-2xl bg-[#1e2329] p-6 shadow-2xl border border-gray-800">
+        
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-bold text-white mb-2">Margin Calculator</h1>
+          <p className="text-sm text-gray-500">Calculate initial margin requirements for your positions</p>
+        </div>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-2 text-gray-400">Select Asset</label>
-          <div className="flex space-x-2">
+        {/* Asset Selection Tabs */}
+        <div className="mb-8">
+          <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-gray-500">Select Market</label>
+          <div className="flex space-x-2 rounded-lg bg-[#2b3139] p-1">
             {assets.map((asset) => (
               <button
                 key={asset.symbol}
                 onClick={() => setSelectedAsset(asset)}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
+                className={`flex-1 rounded-md py-2 text-sm font-semibold transition-all ${
                   selectedAsset?.symbol === asset.symbol
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                    ? "bg-[#474d57] text-white shadow-sm"
+                    : "text-gray-400 hover:text-white hover:bg-[#363c45]"
                 }`}
               >
                 {asset.symbol}
@@ -146,137 +152,140 @@ export default function Home() {
         </div>
 
         {selectedAsset && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div className="bg-gray-800 p-3 rounded-lg">
-                <p className="text-gray-500">Mark Price</p>
-                <p className="font-mono text-lg">${selectedAsset.mark_price.toLocaleString()}</p>
+          <div className="space-y-6">
+            {/* Market Info Cards */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-xl bg-[#2b3139] p-4 border border-gray-800">
+                <p className="mb-1 text-xs text-gray-500">Mark Price</p>
+                <p className="font-mono text-lg font-medium text-white">
+                  ${selectedAsset.mark_price.toLocaleString()}
+                </p>
               </div>
-              <div className="bg-gray-800 p-3 rounded-lg">
-                <p className="text-gray-500">Contract Value</p>
-                <p className="font-mono text-lg">{selectedAsset.contract_value}</p>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Side</label>
-              <div className="flex bg-gray-800 rounded-lg p-1">
-                <button
-                  onClick={() => setSide("long")}
-                  className={`flex-1 py-1 rounded-md text-sm transition-colors ${
-                    side === "long" ? "bg-green-600 text-white" : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Long
-                </button>
-                <button
-                  onClick={() => setSide("short")}
-                  className={`flex-1 py-1 rounded-md text-sm transition-colors ${
-                    side === "short" ? "bg-red-600 text-white" : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  Short
-                </button>
+              <div className="rounded-xl bg-[#2b3139] p-4 border border-gray-800">
+                <p className="mb-1 text-xs text-gray-500">Contract Value</p>
+                <p className="font-mono text-lg font-medium text-white">
+                  {selectedAsset.contract_value} <span className="text-xs text-gray-500">{selectedAsset.symbol}</span>
+                </p>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Order Size</label>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={orderSize}
-                onChange={(e) => setOrderSize(parseFloat(e.target.value) || 0)}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            {/* Trading Form */}
+            <div className="space-y-5">
+              
+              {/* Position Side */}
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">Side</label>
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => setSide("long")}
+                    className={`flex-1 rounded-lg border py-3 text-sm font-bold transition-all ${
+                      side === "long"
+                        ? "border-green-500 bg-green-500/10 text-green-500"
+                        : "border-[#2b3139] bg-[#2b3139] text-gray-400 hover:border-gray-600"
+                    }`}
+                  >
+                    Buy / Long
+                  </button>
+                  <button
+                    onClick={() => setSide("short")}
+                    className={`flex-1 rounded-lg border py-3 text-sm font-bold transition-all ${
+                      side === "short"
+                        ? "border-red-500 bg-red-500/10 text-red-500"
+                        : "border-[#2b3139] bg-[#2b3139] text-gray-400 hover:border-gray-600"
+                    }`}
+                  >
+                    Sell / Short
+                  </button>
+                </div>
+              </div>
+
+              {/* Leverage & Order Size Grid */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Leverage */}
+                <div>
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">Leverage</label>
+                  <div className="relative">
+                    <select
+                      value={leverage}
+                      onChange={(e) => setLeverage(Number(e.target.value))}
+                      className="w-full appearance-none rounded-lg border border-[#2b3139] bg-[#0b0e11] py-3 px-4 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    >
+                      {selectedAsset.allowed_leverage.map((lev) => (
+                        <option key={lev} value={lev}>
+                          {lev}x
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Size */}
+                <div>
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-500">Size (Contracts)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    value={orderSize || ""}
+                    onChange={(e) => setOrderSize(parseFloat(e.target.value) || 0)}
+                    className="w-full rounded-lg border border-[#2b3139] bg-[#0b0e11] py-3 px-4 text-white placeholder-gray-600 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1 text-gray-400">Leverage</label>
-              <select
-                value={leverage}
-                onChange={(e) => setLeverage(Number(e.target.value))}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {selectedAsset.allowed_leverage.map((lev) => (
-                  <option key={lev} value={lev}>
-                    {lev}x
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Calculated Margin */}
-            <div className="pt-4 border-t border-gray-800">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400">Estimated Margin</span>
-                <span className="text-2xl font-bold font-mono text-white">
-                  {calculatedMargin.toFixed(2)}
+            {/* Summary Section */}
+            <div className="mt-6 rounded-xl bg-[#0b0e11] p-5 border border-gray-800">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-400">Estimated Initial Margin</span>
+                <span className="font-mono text-2xl font-bold text-white">
+                  {calculatedMargin.toLocaleString("en-US", { style: "currency", currency: "USD" })}
                 </span>
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Action Button */}
             <button
               onClick={handleSubmit}
               disabled={orderSize <= 0}
-              className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
+              className={`w-full rounded-lg py-4 text-sm font-bold uppercase tracking-wide text-white transition-all ${
                 orderSize > 0
                   ? "bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/20"
-                  : "bg-gray-700 cursor-not-allowed opacity-50"
+                  : "cursor-not-allowed bg-[#2b3139] text-gray-500"
               }`}
             >
-              Submit Order Preview
+              {orderSize > 0 ? "Calculate & Validate" : "Enter Order Details"}
             </button>
 
-            {/* Validation Result */}
+            {/* Validation Feedback */}
             {validationResult && (
               <div
-                className={`mt-4 p-4 rounded-lg border ${
+                className={`flex items-start space-x-3 rounded-lg border p-4 ${
                   validationResult.status === "ok"
-                    ? "bg-green-900/20 border-green-800 text-green-400"
-                    : "bg-red-900/20 border-red-800 text-red-400"
+                    ? "border-green-500/20 bg-green-500/5"
+                    : "border-red-500/20 bg-red-500/5"
                 }`}
               >
-                <div className="flex items-center space-x-2">
+                <div className={`mt-0.5 rounded-full p-1 ${validationResult.status === "ok" ? "bg-green-500/20 text-green-500" : "bg-red-500/20 text-red-500"}`}>
                   {validationResult.status === "ok" ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path></svg>
                   ) : (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                   )}
-                  <span className="font-bold uppercase">{validationResult.status}</span>
                 </div>
-                {validationResult.message && (
-                  <p className="mt-1 text-sm">{validationResult.message}</p>
-                )}
-                <p className="mt-1 text-xs opacity-70">
-                  Backend verified margin: {validationResult.margin_required}
-                </p>
+                <div>
+                  <p className={`text-sm font-bold ${validationResult.status === "ok" ? "text-green-500" : "text-red-500"}`}>
+                    {validationResult.status === "ok" ? "Margin Validated Successfully" : "Validation Failed"}
+                  </p>
+                  {validationResult.message && <p className="mt-1 text-xs text-gray-400">{validationResult.message}</p>}
+                  <p className="mt-2 text-xs font-mono text-gray-500">
+                    Backend Required: <span className="text-gray-300">${validationResult.margin_required}</span>
+                  </p>
+                </div>
               </div>
             )}
           </div>
